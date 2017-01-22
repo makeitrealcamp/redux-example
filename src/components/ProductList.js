@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { Button, Glyphicon } from 'react-bootstrap';
-import store from '../store';
-import { loadProducts, addToCart } from '../actionCreators';
+import { addToCart } from '../actionCreators';
 
 const styles = {
   products: {
@@ -16,45 +16,36 @@ const styles = {
   }
 };
 
-class ProductList extends Component {
-  constructor() {
-    super();
-    this.handleAddToCart = this.handleAddToCart.bind(this);
-
-    this.state = { products: [] }
-
-    store.subscribe(() => {
-      this.setState({
-        products: store.getState().products
-      });
-    });
-
-    setTimeout(() => {
-      store.dispatch(loadProducts());
-    }, 2000);
-  }
-
-  render() {
-    return (
-      <div style={styles.products}>
-        {this.state.products.map(product =>
-          <div className="thumbnail" style={styles.product} key={product.id}>
-            <img src={product.image} alt={product.name} />
-            <div className="caption">
-              <h4>{product.name}</h4>
-              <p>
-                <Button bsStyle="primary" onClick={() => this.handleAddToCart(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
-              </p>
-            </div>
+const ProductList = ({ products, addToCart }) => {
+  return (
+    <div style={styles.products}>
+      {products.map(product =>
+        <div className="thumbnail" style={styles.product} key={product.id}>
+          <img src={product.image} alt={product.name} />
+          <div className="caption">
+            <h4>{product.name}</h4>
+            <p>
+              <Button bsStyle="primary" onClick={() => addToCart(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
+            </p>
           </div>
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+    </div>
+  );
+};
 
-  handleAddToCart(product) {
-    store.dispatch(addToCart(product));
-  }
+const mapStateToProps = state => {
+  return {
+    products: state.products
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addToCart(product) {
+      dispatch(addToCart(product));
+    }
+  };
 }
 
-export default ProductList;
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
