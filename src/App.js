@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Navbar } from 'react-bootstrap';
+import { Navbar, Grid, Row, Col } from 'react-bootstrap';
+import ProductList from './components/ProductList';
+import ShoppingCart from './components/ShoppingCart';
 import './App.css';
 
 class App extends Component {
@@ -14,7 +16,16 @@ class App extends Component {
           </Navbar.Header>
         </Navbar>
 
-
+        <Grid>
+          <Row>
+            <Col sm={8}>
+              <ProductList />
+            </Col>
+            <Col sm={4}>
+              <ShoppingCart />
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
