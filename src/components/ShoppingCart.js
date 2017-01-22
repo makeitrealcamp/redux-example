@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
 import store from '../store';
+import { removeFromCart } from '../actionCreators';
 
 const styles = {
   footer: {
@@ -8,11 +9,10 @@ const styles = {
   }
 }
 
-
 class ShoppingCart extends Component {
   constructor() {
     super();
-    this.removeFromCart = this.removeFromCart.bind(this);
+    this.handleRemoveFromCart = this.handleRemoveFromCart.bind(this);
 
     this.state = { cart: [] };
 
@@ -32,7 +32,7 @@ class ShoppingCart extends Component {
               <tr key={product.id}>
                 <td>{product.name}</td>
                 <td className="text-right">${product.price}</td>
-                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
+                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.handleRemoveFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
               </tr>
             )}
           </tbody>
@@ -49,8 +49,8 @@ class ShoppingCart extends Component {
     )
   }
 
-  removeFromCart(product) {
-    store.dispatch({ type: "REMOVE_FROM_CART", product });
+  handleRemoveFromCart(product) {
+    store.dispatch(removeFromCart(product));
   }
 }
 
